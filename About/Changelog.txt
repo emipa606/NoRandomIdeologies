@@ -1,4 +1,10 @@
 # Changelog for NoRandomIdeologies
 
+1.5.1 - Added preferred ideology per faction-setting. 
+Fixed issues with custom names and colors.
+Supressed the errors when loading an Ideology that references non-existing things
+Used DeepL to update translations for ChineseSimplified, French, German
+
+
 1.5.0 - First publish
 

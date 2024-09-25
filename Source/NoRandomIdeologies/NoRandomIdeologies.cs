@@ -18,8 +18,15 @@ public static class NoRandomIdeologies
     private static readonly FieldInfo isSavingOrLoadingExternalIdeoFieldInfo =
         AccessTools.Field(typeof(GameDataSaveLoader), "isSavingOrLoadingExternalIdeo");
 
+    private static readonly FieldInfo reachedMaxMessagesLimitFieldInfo =
+        AccessTools.Field(typeof(Log), "reachedMaxMessagesLimit");
+
+    public static readonly List<FactionDef> AllFactionDefs;
+
     static NoRandomIdeologies()
     {
+        AllFactionDefs = DefDatabase<FactionDef>.AllDefsListForReading.Where(def => !def.isPlayer)
+            .OrderBy(def => def.label).ToList();
         new Harmony("Mlie.NoRandomIdeologies").PatchAll(Assembly.GetExecutingAssembly());
     }
 
@@ -39,6 +46,7 @@ public static class NoRandomIdeologies
             return;
         }
 
+        NoRandomIdeologiesMod.FactionSelectionCache.Clear();
         lastCheck = lastWriteTime;
 
         var currentIdeoFiles = new List<SaveFileInfo>();
@@ -65,7 +73,7 @@ public static class NoRandomIdeologies
 
         savedIdeos.Clear();
         Log.Message("[NoRandomIdeologies]: Loading saved ideologies into cache. " +
-                    "This may cause errors if any saved ideology have precepts or memes that uses content from not loaded mods. " +
+                    "This may cause warnings if any saved ideology have precepts or memes that uses content from not loaded mods. " +
                     "These will just be skipped and the warnings can be ignored.");
         foreach (var file in currentIdeoFiles)
         {
@@ -77,18 +85,28 @@ public static class NoRandomIdeologies
                 isSavingOrLoadingExternalIdeoFieldInfo.SetValue(null, true);
                 Scribe.loader.InitLoading(filePath);
                 ScribeMetaHeaderUtility.LoadGameDataHeader(ScribeMetaHeaderUtility.ScribeHeaderMode.Ideo, false);
+                var currentLogValue = (bool)reachedMaxMessagesLimitFieldInfo.GetValue(null);
+                if (!currentLogValue)
+                {
+                    reachedMaxMessagesLimitFieldInfo.SetValue(null, true);
+                }
+
                 Scribe_Deep.Look(ref currentIdeo, "ideo");
+                if (!currentLogValue)
+                {
+                    reachedMaxMessagesLimitFieldInfo.SetValue(null, false);
+                }
             }
             catch
             {
-                Log.WarningOnce($"[NoRandomIdeologies]: Skipping {filePath} since it couldnt be loaded.",
+                Log.WarningOnce($"[NoRandomIdeologies]: Saved ideology {filePath} skipped since it couldnt be loaded.",
                     filePath.GetHashCode());
                 continue;
             }
 
             if (currentIdeo == null)
             {
-                Log.WarningOnce($"[NoRandomIdeologies]: Skipping {filePath} since it couldnt be loaded.",
+                Log.WarningOnce($"[NoRandomIdeologies]: Saved ideology {filePath} skipped since it couldnt be loaded.",
                     filePath.GetHashCode());
                 continue;
             }
@@ -97,7 +115,7 @@ public static class NoRandomIdeologies
                     precept == null))
             {
                 Log.WarningOnce(
-                    $"[NoRandomIdeologies]: Skipping {currentIdeo} since it has a precepts that is not loaded.",
+                    $"[NoRandomIdeologies]: Saved ideology {currentIdeo} skipped since it has a precepts that is not loaded.",
                     filePath.GetHashCode());
                 continue;
             }
@@ -105,7 +123,7 @@ public static class NoRandomIdeologies
             if (!currentIdeo.memes.Any() || currentIdeo.memes.Any(memeDef => memeDef == null))
             {
                 Log.WarningOnce(
-                    $"[NoRandomIdeologies]: Skipping {currentIdeo} since it has memes that are not loaded.",
+                    $"[NoRandomIdeologies]: Saved ideology {currentIdeo} skipped since it has memes that are not loaded.",
                     filePath.GetHashCode());
                 continue;
             }
@@ -113,7 +131,7 @@ public static class NoRandomIdeologies
             if (currentIdeo.VeneratedAnimals.Any(thingDef => thingDef == null))
             {
                 Log.WarningOnce(
-                    $"[NoRandomIdeologies]: Skipping {currentIdeo} since it has venerated animals that are not loaded.",
+                    $"[NoRandomIdeologies]: Saved ideology {currentIdeo} skipped since it has venerated animals that are not loaded.",
                     filePath.GetHashCode());
                 continue;
             }
@@ -121,14 +139,15 @@ public static class NoRandomIdeologies
             if (currentIdeo.PreferredXenotypes.Any(xenotypeDef => xenotypeDef == null))
             {
                 Log.WarningOnce(
-                    $"[NoRandomIdeologies]: Skipping {currentIdeo} since it has preferred xenotypes that are not loaded.",
+                    $"[NoRandomIdeologies]: Saved ideology {currentIdeo} skipped since it has preferred xenotypes that are not loaded.",
                     filePath.GetHashCode());
                 continue;
             }
 
-            Log.Message($"[NoRandomIdeologies]: Adding {currentIdeo} to possible ideologies.");
+            Log.Message($"[NoRandomIdeologies]: Added {currentIdeo} to possible ideologies.");
             Scribe.loader.FinalizeLoading();
-
+            currentIdeo.fileName = Path.GetFileNameWithoutExtension(new FileInfo(filePath).Name);
+            IdeoGenerator.InitLoadedIdeo(currentIdeo);
             savedIdeos.Add(currentIdeo);
         }
 
@@ -136,17 +155,45 @@ public static class NoRandomIdeologies
         Scribe.ForceStop();
     }
 
+    public static List<Ideo> FindAllValidIdeologies(FactionDef factionDef, out string toolTip)
+    {
+        var toolTipList = new List<string>();
+        var possibleIdeos = new List<Ideo>();
+
+        if (factionDef.fixedIdeo)
+        {
+            toolTip = "NRI.fixedIdeo".Translate();
+            return possibleIdeos;
+        }
+
+        LoadIdeos();
+
+        foreach (var savedIdeo in savedIdeos)
+        {
+            if (savedIdeo.memes != null && savedIdeo.memes.Any(def => !IdeoUtility.IsMemeAllowedFor(def, factionDef)))
+            {
+                toolTipList.Add("NRI.notAllowedMemes".Translate(savedIdeo));
+                continue;
+            }
+
+            if (factionDef.requiredMemes != null && factionDef.requiredMemes.Any(def => !savedIdeo.memes.Contains(def)))
+            {
+                toolTipList.Add("NRI.missingRequiredMemes".Translate(savedIdeo));
+                continue;
+            }
+
+            possibleIdeos.Add(savedIdeo);
+        }
+
+        toolTip = string.Join(Environment.NewLine, toolTipList);
+        return possibleIdeos;
+    }
+
     public static bool FindIdeoForFaction(Faction faction, out Ideo ideo)
     {
         ideo = null;
         if (faction.IsPlayer)
         {
-            if (Prefs.DevMode)
-            {
-                Log.WarningOnce($"[NoRandomIdeologies]: Skipping {faction} since its the player faction.",
-                    faction.GetHashCode());
-            }
-
             return false;
         }
 
@@ -154,23 +201,11 @@ public static class NoRandomIdeologies
 
         if (factionDef.fixedIdeo)
         {
-            if (Prefs.DevMode)
-            {
-                Log.WarningOnce($"[NoRandomIdeologies]: Skipping {factionDef} since it has a fixed ideology.",
-                    factionDef.GetHashCode());
-            }
-
             return false;
         }
 
         if (Find.IdeoManager.classicMode && Faction.OfPlayer != null && Faction.OfPlayer.ideos?.PrimaryIdeo != null)
         {
-            if (Prefs.DevMode)
-            {
-                Log.WarningOnce("[NoRandomIdeologies]: Classic mode selected, no custom ideologies allowed.",
-                    "no custom ideologies allowed".GetHashCode());
-            }
-
             return false;
         }
 
@@ -181,27 +216,26 @@ public static class NoRandomIdeologies
             return false;
         }
 
+        if (NoRandomIdeologiesMod.instance.Settings.PreferedIdeology.TryGetValue(factionDef.defName,
+                out var selectedIdeology))
+        {
+            var selectedIdeo = savedIdeos.FirstOrDefault(ideo => ideo.name == selectedIdeology);
+            if (selectedIdeo != null)
+            {
+                ideo = selectedIdeo;
+                return true;
+            }
+        }
+
         foreach (var savedIdeo in savedIdeos.InRandomOrder())
         {
             if (savedIdeo.memes != null && savedIdeo.memes.Any(def => !IdeoUtility.IsMemeAllowedFor(def, factionDef)))
             {
-                if (Prefs.DevMode)
-                {
-                    Log.WarningOnce($"[NoRandomIdeologies]: {savedIdeo} has memes not allowed by {factionDef}.",
-                        $"{savedIdeo}{factionDef}".GetHashCode());
-                }
-
                 continue;
             }
 
             if (factionDef.requiredMemes != null && factionDef.requiredMemes.Any(def => !savedIdeo.memes.Contains(def)))
             {
-                if (Prefs.DevMode)
-                {
-                    Log.WarningOnce($"[NoRandomIdeologies]: {factionDef} has required memes not in {savedIdeo}.",
-                        $"{savedIdeo}{factionDef}".GetHashCode());
-                }
-
                 continue;
             }
 

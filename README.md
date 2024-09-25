@@ -1,4 +1,4 @@
-# [No Random Ideologies]()
+# [No Random Ideologies](https://steamcommunity.com/sharedfiles/filedetails/?id=3337263133)
 
 ![Image](https://i.imgur.com/iCj5o7O.png)
 
@@ -32,3 +32,5 @@ Since modding is just a hobby for me I expect no donations to keep modding. If y
 -  Use [RimSort](https://github.com/RimSort/RimSort/releases/latest) to sort your mods
 
 
+
+[![Image](https://img.shields.io/github/v/release/emipa606/NoRandomIdeologies?label=latest%20version&style=plastic&labelColor=0070cd&color=white)](https://steamcommunity.com/sharedfiles/filedetails/changelog/3337263133)

@@ -16,15 +16,18 @@ public static class FactionIdeosTracker_ChooseOrGenerateIdeo
 
         if (Find.IdeoManager.IdeosListForReading?.Contains(ideo) == true)
         {
+            if (Prefs.DevMode)
+            {
+                Log.Message($"[NoRandomIdeologies]: Gave existing ideology {ideo} to {___faction}");
+            }
+
             ___primaryIdeo = ideo;
             return false;
         }
 
-        ideo.foundation.InitPrecepts(new IdeoGenerationParms(___faction.def));
-        ideo.RecachePrecepts();
-        ideo.primaryFactionColor = ___faction.Color;
         ___primaryIdeo = ideo;
         Find.IdeoManager.Add(ideo);
+        Log.Message($"[NoRandomIdeologies]: Gave ideology {ideo} to {___faction}");
         return false;
     }
 }
