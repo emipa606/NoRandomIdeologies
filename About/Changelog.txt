@@ -1,5 +1,8 @@
 # Changelog for NoRandomIdeologies
 
+1.5.2 - Added 1.4 version
+
+
 1.5.1 - Added preferred ideology per faction-setting. 
 Fixed issues with custom names and colors.
 Supressed the errors when loading an Ideology that references non-existing things
