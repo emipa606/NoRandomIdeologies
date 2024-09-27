@@ -1,5 +1,8 @@
 # Changelog for NoRandomIdeologies
 
+1.5.3 - Added spanish translation, thank you to FerchuDev!
+
+
 1.5.2 - Added 1.4 version
 
 
