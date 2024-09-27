@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <NRI.factionTitle>Preferencias de facciones</NRI.factionTitle>
+  <NRI.noneFound>No válido</NRI.noneFound>
+  <NRI.resetAllFactions>Restablecer todas las facciones</NRI.resetAllFactions>
+  <NRI.reset>Restablecer</NRI.reset>
+  <NRI.none>Ninguno</NRI.none>
+  <NRI.activeGame>Las ideologías preferidas por facción solo se pueden definir con un juego activo debido a cómo se cargan las ideologías</NRI.activeGame>
+  <NRI.fixedIdeo>La facción tiene una ideología fija definida</NRI.fixedIdeo>
+  <NRI.notAllowedMemes>{0} no tiene memes permitidos</NRI.notAllowedMemes>
+  <NRI.missingRequiredMemes>A {0} le faltan memes requeridos</NRI.missingRequiredMemes>
+  <NRI.modVersion>Versión del mod instalada: {0}</NRI.modVersion>
+</LanguageData>
