@@ -5,6 +5,10 @@
   <NRI.resetAllFactions>Reset all factions</NRI.resetAllFactions>
   <NRI.reset>Reset</NRI.reset>
   <NRI.none>None</NRI.none>
+  <NRI.useRandomSaved>Random saved</NRI.useRandomSaved>
+  <NRI.useRandomSavedTT>Will choose a random saved Ideology when generating the faction</NRI.useRandomSavedTT>
+  <NRI.useGenerated>Generate (Vanilla)</NRI.useGenerated>
+  <NRI.useGeneratedTT>Will use the vanilla ideology behavior when generating the faction</NRI.useGeneratedTT>
   <NRI.activeGame>Preferred ideologies per faction can only be defined with an active game due to how ideologies are loaded</NRI.activeGame>
   <NRI.fixedIdeo>Faction has a fixed ideology defined</NRI.fixedIdeo>
   <NRI.notAllowedMemes>{0} has not allowed memes</NRI.notAllowedMemes>

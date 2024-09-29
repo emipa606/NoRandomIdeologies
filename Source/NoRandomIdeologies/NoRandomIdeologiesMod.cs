@@ -56,6 +56,7 @@ internal class NoRandomIdeologiesMod : Mod
     /// <param name="rect"></param>
     public override void DoSettingsWindowContents(Rect rect)
     {
+        NoRandomIdeologies.LoadIdeos();
         var listing_Standard = new Listing_Standard();
         listing_Standard.Begin(rect);
         if (currentVersion != null)
@@ -65,13 +66,13 @@ internal class NoRandomIdeologiesMod : Mod
             GUI.contentColor = Color.white;
         }
 
-        if (Current.Game == null)
-        {
-            listing_Standard.Gap();
-            listing_Standard.Label("NRI.activeGame".Translate());
-            listing_Standard.End();
-            return;
-        }
+        //if (Current.Game == null)
+        //{
+        //    listing_Standard.Gap();
+        //    listing_Standard.Label("NRI.activeGame".Translate());
+        //    listing_Standard.End();
+        //    return;
+        //}
 
         if (Settings.PreferedIdeology.Any() &&
             listing_Standard.ButtonTextLabeledPct("NRI.resetAllFactions".Translate(), "NRI.reset".Translate(), 0.7f))
@@ -143,18 +144,38 @@ internal class NoRandomIdeologiesMod : Mod
                 continue;
             }
 
-            var selected = instance.Settings.PreferedIdeology.TryGetValue(factionDef.defName, out var selectedIdeology);
+            var savedValueFound =
+                instance.Settings.PreferedIdeology.TryGetValue(factionDef.defName, out var selectedIdeology);
+            string buttonText;
+            if (savedValueFound)
+            {
+                buttonText = selectedIdeology == NoRandomIdeologies.VanillaSaveString
+                    ? "NRI.useGenerated".Translate().RawText
+                    : selectedIdeology;
+            }
+            else
+            {
+                buttonText = "NRI.useRandomSaved".Translate().RawText;
+            }
 
-            if (!Widgets.ButtonText(row.RightPart(0.3f).ExpandedBy(0, 4f),
-                    selected ? selectedIdeology : "NRI.none".Translate()))
+            if (!Widgets.ButtonText(row.RightPart(0.3f).ExpandedBy(0, 4f), buttonText))
             {
                 continue;
             }
 
             var options = new List<FloatMenuOption>
             {
-                new FloatMenuOption("NRI.none".Translate(),
-                    delegate { instance.Settings.PreferedIdeology.Remove(factionDef.defName); })
+                new FloatMenuOption("NRI.useRandomSaved".Translate(),
+                    delegate { instance.Settings.PreferedIdeology.Remove(factionDef.defName); },
+                    mouseoverGuiAction: tooltipRect =>
+                        TooltipHandler.TipRegion(tooltipRect, "NRI.useRandomSavedTT".Translate())),
+                new FloatMenuOption("NRI.useGenerated".Translate(),
+                    delegate
+                    {
+                        instance.Settings.PreferedIdeology[factionDef.defName] = NoRandomIdeologies.VanillaSaveString;
+                    },
+                    mouseoverGuiAction: tooltipRect =>
+                        TooltipHandler.TipRegion(tooltipRect, "NRI.useGeneratedTT".Translate()))
             };
             foreach (var ideo in validIdeologies.OrderBy(ideo => ideo.name))
             {
@@ -169,5 +190,11 @@ internal class NoRandomIdeologiesMod : Mod
 
         listing_ScrollView.End();
         Widgets.EndScrollView();
+    }
+
+    public override void WriteSettings()
+    {
+        base.WriteSettings();
+        NoRandomIdeologies.LastCheck = DateTime.MinValue;
     }
 }

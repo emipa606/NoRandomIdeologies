@@ -11,4 +11,8 @@
   <NRI.notAllowedMemes>{0}不允许使用备忘录</NRI.notAllowedMemes>
   <NRI.missingRequiredMemes>{0}缺少所需的备忘录</NRI.missingRequiredMemes>
   <NRI.modVersion>已安装模块版本：{0}</NRI.modVersion>
+  <NRI.useRandomSaved>随机保存</NRI.useRandomSaved>
+  <NRI.useRandomSavedTT>生成派别时将随机选择一个已保存的意识形态</NRI.useRandomSavedTT>
+  <NRI.useGenerated>生成（香草）</NRI.useGenerated>
+  <NRI.useGeneratedTT>生成派别时，将使用香草意识形态行为</NRI.useGeneratedTT>
 </LanguageData>

@@ -1,5 +1,9 @@
 # Changelog for NoRandomIdeologies
 
+1.5.4 - Made the mod-settings a bit clearer. You can now choose to skip using saved ideologies for specific factions.
+Used DeepL to update translations for ChineseSimplified, French, German, spanish
+
+
 1.5.3 - Added spanish translation, thank you to FerchuDev!
 
 

@@ -12,7 +12,8 @@ namespace NoRandomIdeologies;
 [StaticConstructorOnStartup]
 public static class NoRandomIdeologies
 {
-    private static DateTime lastCheck;
+    public const string VanillaSaveString = "./Vanilla";
+    public static DateTime LastCheck;
     private static readonly List<Ideo> savedIdeos = [];
 
     private static readonly FieldInfo isSavingOrLoadingExternalIdeoFieldInfo =
@@ -30,7 +31,7 @@ public static class NoRandomIdeologies
         new Harmony("Mlie.NoRandomIdeologies").PatchAll(Assembly.GetExecutingAssembly());
     }
 
-    private static void LoadIdeos()
+    public static void LoadIdeos()
     {
         if (!GenFilePaths.AllCustomIdeoFiles.Any())
         {
@@ -41,13 +42,13 @@ public static class NoRandomIdeologies
 
         var lastWriteTime = GenFilePaths.AllCustomIdeoFiles.OrderByDescending(info => info.LastWriteTime).First()
             .LastWriteTime;
-        if (lastCheck == lastWriteTime)
+        if (LastCheck == lastWriteTime)
         {
             return;
         }
 
         NoRandomIdeologiesMod.FactionSelectionCache.Clear();
-        lastCheck = lastWriteTime;
+        LastCheck = lastWriteTime;
 
         var currentIdeoFiles = new List<SaveFileInfo>();
         foreach (var allCustomIdeoFile in GenFilePaths.AllCustomIdeoFiles)
@@ -145,9 +146,13 @@ public static class NoRandomIdeologies
             }
 
             Log.Message($"[NoRandomIdeologies]: Added {currentIdeo} to possible ideologies.");
-            Scribe.loader.FinalizeLoading();
-            currentIdeo.fileName = Path.GetFileNameWithoutExtension(new FileInfo(filePath).Name);
-            IdeoGenerator.InitLoadedIdeo(currentIdeo);
+            if (Current.Game != null)
+            {
+                Scribe.loader.FinalizeLoading();
+                currentIdeo.fileName = Path.GetFileNameWithoutExtension(new FileInfo(filePath).Name);
+                IdeoGenerator.InitLoadedIdeo(currentIdeo);
+            }
+
             savedIdeos.Add(currentIdeo);
         }
 
@@ -219,6 +224,11 @@ public static class NoRandomIdeologies
         if (NoRandomIdeologiesMod.instance.Settings.PreferedIdeology.TryGetValue(factionDef.defName,
                 out var selectedIdeology))
         {
+            if (selectedIdeology == VanillaSaveString)
+            {
+                return false;
+            }
+
             var selectedIdeo = savedIdeos.FirstOrDefault(ideo => ideo.name == selectedIdeology);
             if (selectedIdeo != null)
             {
