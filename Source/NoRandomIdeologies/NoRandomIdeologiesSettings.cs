@@ -8,6 +8,7 @@ namespace NoRandomIdeologies;
 /// </summary>
 internal class NoRandomIdeologiesSettings : ModSettings
 {
+    public float PercentChance = 0.5f;
     public Dictionary<string, string> PreferedIdeology = [];
     private List<string> preferedIdeologyKeys = [];
     private List<string> preferedIdeologyValues = [];
@@ -20,5 +21,6 @@ internal class NoRandomIdeologiesSettings : ModSettings
         base.ExposeData();
         Scribe_Collections.Look(ref PreferedIdeology, "PreferedIdeology", LookMode.Value, LookMode.Value,
             ref preferedIdeologyKeys, ref preferedIdeologyValues);
+        Scribe_Values.Look(ref PercentChance, "PercentChance", 0.5f);
     }
 }

@@ -66,13 +66,9 @@ internal class NoRandomIdeologiesMod : Mod
             GUI.contentColor = Color.white;
         }
 
-        //if (Current.Game == null)
-        //{
-        //    listing_Standard.Gap();
-        //    listing_Standard.Label("NRI.activeGame".Translate());
-        //    listing_Standard.End();
-        //    return;
-        //}
+        Settings.PercentChance = listing_Standard.SliderLabeled(
+            "NRI.percentChance".Translate(Settings.PercentChance.ToStringPercent()),
+            Settings.PercentChance, 0, 1f, tooltip: "NRI.percentChanceTT".Translate());
 
         if (Settings.PreferedIdeology.Any() &&
             listing_Standard.ButtonTextLabeledPct("NRI.resetAllFactions".Translate(), "NRI.reset".Translate(), 0.7f))
@@ -149,9 +145,18 @@ internal class NoRandomIdeologiesMod : Mod
             string buttonText;
             if (savedValueFound)
             {
-                buttonText = selectedIdeology == NoRandomIdeologies.VanillaSaveString
-                    ? "NRI.useGenerated".Translate().RawText
-                    : selectedIdeology;
+                switch (selectedIdeology)
+                {
+                    case NoRandomIdeologies.VanillaSaveString:
+                        buttonText = "NRI.useGenerated".Translate().RawText;
+                        break;
+                    case NoRandomIdeologies.PercentSaveString:
+                        buttonText = "NRI.useRandomOrSaved".Translate().RawText;
+                        break;
+                    default:
+                        buttonText = selectedIdeology;
+                        break;
+                }
             }
             else
             {
@@ -169,6 +174,13 @@ internal class NoRandomIdeologiesMod : Mod
                     delegate { instance.Settings.PreferedIdeology.Remove(factionDef.defName); },
                     mouseoverGuiAction: tooltipRect =>
                         TooltipHandler.TipRegion(tooltipRect, "NRI.useRandomSavedTT".Translate())),
+                new FloatMenuOption("NRI.useRandomOrSaved".Translate(),
+                    delegate
+                    {
+                        instance.Settings.PreferedIdeology[factionDef.defName] = NoRandomIdeologies.PercentSaveString;
+                    },
+                    mouseoverGuiAction: tooltipRect =>
+                        TooltipHandler.TipRegion(tooltipRect, "NRI.useRandomOrSavedTT".Translate())),
                 new FloatMenuOption("NRI.useGenerated".Translate(),
                     delegate
                     {

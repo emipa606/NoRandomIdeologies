@@ -13,6 +13,7 @@ namespace NoRandomIdeologies;
 public static class NoRandomIdeologies
 {
     public const string VanillaSaveString = "./Vanilla";
+    public const string PercentSaveString = "./UsePercent";
     public static DateTime LastCheck;
     private static readonly List<Ideo> savedIdeos = [];
 
@@ -229,11 +230,21 @@ public static class NoRandomIdeologies
                 return false;
             }
 
-            var selectedIdeo = savedIdeos.FirstOrDefault(ideo => ideo.name == selectedIdeology);
-            if (selectedIdeo != null)
+            if (selectedIdeology == PercentSaveString)
             {
-                ideo = selectedIdeo;
-                return true;
+                if (Rand.Chance(NoRandomIdeologiesMod.instance.Settings.PercentChance))
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                var selectedIdeo = savedIdeos.FirstOrDefault(ideo => ideo.name == selectedIdeology);
+                if (selectedIdeo != null)
+                {
+                    ideo = selectedIdeo;
+                    return true;
+                }
             }
         }
 

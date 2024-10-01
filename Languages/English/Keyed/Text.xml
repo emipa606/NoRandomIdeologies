@@ -5,6 +5,10 @@
   <NRI.resetAllFactions>Reset all factions</NRI.resetAllFactions>
   <NRI.reset>Reset</NRI.reset>
   <NRI.none>None</NRI.none>
+  <NRI.percentChance>'Generated OR Saved' has a {0} chance of generating an ideology</NRI.percentChance>
+  <NRI.percentChanceTT>If using the Random OR Saved option, this is the chance of generating an ideology instead of selecting a saved one.</NRI.percentChanceTT>
+  <NRI.useRandomOrSaved>Generated OR Saved</NRI.useRandomOrSaved>
+  <NRI.useRandomOrSavedTT>Will choose between a saved and a generated with a {} chance of generating an ideology.</NRI.useRandomOrSavedTT>
   <NRI.useRandomSaved>Random saved</NRI.useRandomSaved>
   <NRI.useRandomSavedTT>Will choose a random saved Ideology when generating the faction</NRI.useRandomSavedTT>
   <NRI.useGenerated>Generate (Vanilla)</NRI.useGenerated>

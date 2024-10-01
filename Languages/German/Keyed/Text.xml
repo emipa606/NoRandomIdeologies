@@ -15,4 +15,8 @@
   <NRI.useRandomSavedTT>Wählt bei der Erstellung der Fraktion eine zufällige gespeicherte Ideologie</NRI.useRandomSavedTT>
   <NRI.useGenerated>Erzeugen (Vanille)</NRI.useGenerated>
   <NRI.useGeneratedTT>Wird das Verhalten der Vanille-Ideologie bei der Erstellung der Fraktion verwenden</NRI.useGeneratedTT>
+  <NRI.percentChance>Generiert ODER gerettet' hat eine {0} Chance, eine Ideologie zu generieren</NRI.percentChance>
+  <NRI.percentChanceTT>Bei Verwendung der Option Zufällig ODER Gespeichert ist dies die Wahrscheinlichkeit, dass eine Ideologie generiert wird, anstatt eine gespeicherte auszuwählen.</NRI.percentChanceTT>
+  <NRI.useRandomOrSaved>Erzeugt ODER Gespeichert</NRI.useRandomOrSaved>
+  <NRI.useRandomOrSavedTT>Wählt zwischen einer gespeicherten und einer erzeugten mit einer {} Chance, eine Ideologie zu erzeugen.</NRI.useRandomOrSavedTT>
 </LanguageData>

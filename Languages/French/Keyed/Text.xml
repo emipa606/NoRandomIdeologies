@@ -15,4 +15,8 @@
   <NRI.useRandomSavedTT>Choisira une idéologie sauvegardée au hasard lors de la création de la faction.</NRI.useRandomSavedTT>
   <NRI.useGenerated>Générer (Vanille)</NRI.useGenerated>
   <NRI.useGeneratedTT>Le comportement de l'idéologie vanille sera utilisé lors de la génération de la faction.</NRI.useGeneratedTT>
+  <NRI.percentChance>Générée OU sauvegardée" a {0} chances de générer une idéologie.</NRI.percentChance>
+  <NRI.percentChanceTT>Si vous utilisez l'option Aléatoire OU Sauvegardé, il s'agit du risque de générer une idéologie au lieu de sélectionner une idéologie sauvegardée.</NRI.percentChanceTT>
+  <NRI.useRandomOrSaved>Généré OU sauvegardé</NRI.useRandomOrSaved>
+  <NRI.useRandomOrSavedTT>Choisira entre un sauvé et un généré avec une {} chance de générer une idéologie.</NRI.useRandomOrSavedTT>
 </LanguageData>
