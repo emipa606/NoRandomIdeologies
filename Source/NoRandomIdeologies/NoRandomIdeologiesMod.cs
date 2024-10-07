@@ -59,22 +59,28 @@ internal class NoRandomIdeologiesMod : Mod
         NoRandomIdeologies.LoadIdeos();
         var listing_Standard = new Listing_Standard();
         listing_Standard.Begin(rect);
-        if (currentVersion != null)
-        {
-            GUI.contentColor = Color.gray;
-            listing_Standard.Label("NRI.modVersion".Translate(currentVersion));
-            GUI.contentColor = Color.white;
-        }
 
         Settings.PercentChance = listing_Standard.SliderLabeled(
             "NRI.percentChance".Translate(Settings.PercentChance.ToStringPercent()),
             Settings.PercentChance, 0, 1f, tooltip: "NRI.percentChanceTT".Translate());
 
-        if (Settings.PreferedIdeology.Any() &&
+        if (Settings.CanReset() &&
             listing_Standard.ButtonTextLabeledPct("NRI.resetAllFactions".Translate(), "NRI.reset".Translate(), 0.7f))
         {
+            Settings.Reset();
+            FactionSelectionCache.Clear();
+        }
+        else
+        {
             listing_Standard.Gap();
-            Settings.PreferedIdeology.Clear();
+            listing_Standard.Gap();
+        }
+
+        if (currentVersion != null)
+        {
+            GUI.contentColor = Color.gray;
+            listing_Standard.Label("NRI.modVersion".Translate(currentVersion));
+            GUI.contentColor = Color.white;
         }
 
         listing_Standard.End();
@@ -113,6 +119,27 @@ internal class NoRandomIdeologiesMod : Mod
             }
 
             TooltipHandler.TipRegion(row.LeftPart(0.65f), factionDef.description);
+
+            var ignore = Settings.FactionIgnore.Contains(factionDef.defName);
+            var ignoreWas = ignore;
+            Widgets.CheckboxLabeled(row.RightPart(0.6f).LeftHalf(), "NRI.overrideRestrictions".Translate(), ref ignore);
+            TooltipHandler.TipRegion(row.RightPart(0.6f).LeftHalf(), "NRI.overrideRestrictionsTT".Translate());
+            if (ignore != ignoreWas)
+            {
+                FactionSelectionCache.Remove(factionDef);
+                if (ignore)
+                {
+                    Settings.FactionIgnore.Add(factionDef.defName);
+                    factionDef.fixedIdeo = false;
+                    factionDef.requiredMemes = [];
+                }
+                else
+                {
+                    Settings.FactionIgnore.Remove(factionDef.defName);
+                    factionDef.fixedIdeo = NoRandomIdeologies.VanillaFixedIdologies[factionDef];
+                    factionDef.requiredMemes = NoRandomIdeologies.VanillaRequiredMemes[factionDef];
+                }
+            }
 
             List<Ideo> validIdeologies;
             string toolTip;

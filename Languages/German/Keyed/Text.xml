@@ -19,4 +19,6 @@
   <NRI.percentChanceTT>Bei Verwendung der Option Zufällig ODER Gespeichert ist dies die Wahrscheinlichkeit, dass eine Ideologie generiert wird, anstatt eine gespeicherte auszuwählen.</NRI.percentChanceTT>
   <NRI.useRandomOrSaved>Erzeugt ODER Gespeichert</NRI.useRandomOrSaved>
   <NRI.useRandomOrSavedTT>Wählt zwischen einer gespeicherten und einer erzeugten mit einer {} Chance, eine Ideologie zu erzeugen.</NRI.useRandomOrSavedTT>
+  <NRI.overrideRestrictions>Einschränkungen ignorieren</NRI.overrideRestrictions>
+  <NRI.overrideRestrictionsTT>Damit werden alle Beschränkungen dieser Fraktion in Bezug auf Ideologien aufgehoben.</NRI.overrideRestrictionsTT>
 </LanguageData>

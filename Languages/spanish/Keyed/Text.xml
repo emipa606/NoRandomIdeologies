@@ -19,4 +19,6 @@
   <NRI.percentChanceTT>如果使用 "随机 "或 "保存 "选项，这就是生成一个意识形态而不是选择一个保存的意识形态的几率。</NRI.percentChanceTT>
   <NRI.useRandomOrSaved>生成或保存</NRI.useRandomOrSaved>
   <NRI.useRandomOrSavedTT>将在保存的和生成的意识形态之间进行选择，生成意识形态的几率为 {}。</NRI.useRandomOrSavedTT>
+  <NRI.overrideRestrictions>忽略限制</NRI.overrideRestrictions>
+  <NRI.overrideRestrictionsTT>这将消除该派别在意识形态方面的所有限制</NRI.overrideRestrictionsTT>
 </LanguageData>

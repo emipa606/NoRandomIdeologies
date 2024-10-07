@@ -17,6 +17,10 @@ public static class NoRandomIdeologies
     public static DateTime LastCheck;
     private static readonly List<Ideo> savedIdeos = [];
 
+    public static readonly Dictionary<FactionDef, bool> VanillaFixedIdologies;
+    public static readonly Dictionary<FactionDef, List<MemeDef>> VanillaRequiredMemes;
+
+
     private static readonly FieldInfo isSavingOrLoadingExternalIdeoFieldInfo =
         AccessTools.Field(typeof(GameDataSaveLoader), "isSavingOrLoadingExternalIdeo");
 
@@ -29,6 +33,26 @@ public static class NoRandomIdeologies
     {
         AllFactionDefs = DefDatabase<FactionDef>.AllDefsListForReading.Where(def => !def.isPlayer)
             .OrderBy(def => def.label).ToList();
+        VanillaFixedIdologies = [];
+        VanillaRequiredMemes = [];
+        if (NoRandomIdeologiesMod.instance.Settings.FactionIgnore == null)
+        {
+            NoRandomIdeologiesMod.instance.Settings.FactionIgnore = [];
+        }
+
+        foreach (var factionDef in AllFactionDefs)
+        {
+            VanillaFixedIdologies[factionDef] = factionDef.fixedIdeo;
+            VanillaRequiredMemes[factionDef] = factionDef.requiredMemes;
+            if (!NoRandomIdeologiesMod.instance.Settings.FactionIgnore.Contains(factionDef.defName))
+            {
+                continue;
+            }
+
+            factionDef.fixedIdeo = false;
+            factionDef.requiredMemes = [];
+        }
+
         new Harmony("Mlie.NoRandomIdeologies").PatchAll(Assembly.GetExecutingAssembly());
     }
 

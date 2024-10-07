@@ -5,6 +5,8 @@
   <NRI.resetAllFactions>Reset all factions</NRI.resetAllFactions>
   <NRI.reset>Reset</NRI.reset>
   <NRI.none>None</NRI.none>
+  <NRI.overrideRestrictions>Ignore restrictions</NRI.overrideRestrictions>
+  <NRI.overrideRestrictionsTT>This will remove all restrictions from this faction regarding Ideologies</NRI.overrideRestrictionsTT>
   <NRI.percentChance>'Generated OR Saved' has a {0} chance of generating an ideology</NRI.percentChance>
   <NRI.percentChanceTT>If using the Random OR Saved option, this is the chance of generating an ideology instead of selecting a saved one.</NRI.percentChanceTT>
   <NRI.useRandomOrSaved>Generated OR Saved</NRI.useRandomOrSaved>

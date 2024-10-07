@@ -8,6 +8,7 @@ namespace NoRandomIdeologies;
 /// </summary>
 internal class NoRandomIdeologiesSettings : ModSettings
 {
+    public List<string> FactionIgnore = [];
     public float PercentChance = 0.5f;
     public Dictionary<string, string> PreferedIdeology = [];
     private List<string> preferedIdeologyKeys = [];
@@ -21,6 +22,29 @@ internal class NoRandomIdeologiesSettings : ModSettings
         base.ExposeData();
         Scribe_Collections.Look(ref PreferedIdeology, "PreferedIdeology", LookMode.Value, LookMode.Value,
             ref preferedIdeologyKeys, ref preferedIdeologyValues);
+        Scribe_Collections.Look(ref FactionIgnore, "FactionIgnore", LookMode.Value);
         Scribe_Values.Look(ref PercentChance, "PercentChance", 0.5f);
+    }
+
+    public bool CanReset()
+    {
+        return PreferedIdeology.Count > 0 || FactionIgnore.Count > 0 || PercentChance != 0.5f;
+    }
+
+    public void Reset()
+    {
+        PreferedIdeology = [];
+        foreach (var keyValuePair in NoRandomIdeologies.VanillaFixedIdologies)
+        {
+            keyValuePair.Key.fixedIdeo = keyValuePair.Value;
+        }
+
+        foreach (var keyValuePair in NoRandomIdeologies.VanillaRequiredMemes)
+        {
+            keyValuePair.Key.requiredMemes = keyValuePair.Value;
+        }
+
+        FactionIgnore = [];
+        PercentChance = 0.5f;
     }
 }
