@@ -14,14 +14,15 @@ public static class FactionIdeosTracker_ChooseOrGenerateIdeo
             return true;
         }
 
-        if (Find.IdeoManager.IdeosListForReading?.Contains(ideo) == true)
+        var existingIdeo = Find.IdeoManager.IdeosListForReading?.FirstOrDefault(ideology => ideology.name == ideo.name);
+        if (existingIdeo != null)
         {
             if (Prefs.DevMode)
             {
-                Log.Message($"[NoRandomIdeologies]: Gave existing ideology {ideo} to {___faction}");
+                Log.Message($"[NoRandomIdeologies]: Gave existing ideology {existingIdeo} to {___faction}");
             }
 
-            ___primaryIdeo = ideo;
+            ___primaryIdeo = existingIdeo;
             return false;
         }
 

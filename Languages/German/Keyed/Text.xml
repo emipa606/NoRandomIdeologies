@@ -21,4 +21,8 @@
   <NRI.useRandomOrSavedTT>Wählt zwischen einer gespeicherten und einer erzeugten mit einer {} Chance, eine Ideologie zu erzeugen.</NRI.useRandomOrSavedTT>
   <NRI.overrideRestrictions>Einschränkungen ignorieren</NRI.overrideRestrictions>
   <NRI.overrideRestrictionsTT>Damit werden alle Beschränkungen dieser Fraktion in Bezug auf Ideologien aufgehoben.</NRI.overrideRestrictionsTT>
+  <NRI.changeAll>Alle ändern in...</NRI.changeAll>
+  <NRI.changeAllSelect>Wählen Sie</NRI.changeAllSelect>
+  <NRI.defaultOption>Standardwert für neue Fraktionen</NRI.defaultOption>
+  <NRI.defaultOptionTT>Was hinzugefügte Fraktionen aus neuen Mods als Standardwert verwenden sollten.</NRI.defaultOptionTT>
 </LanguageData>

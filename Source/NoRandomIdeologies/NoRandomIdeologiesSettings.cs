@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Verse;
 
 namespace NoRandomIdeologies;
@@ -8,6 +9,7 @@ namespace NoRandomIdeologies;
 /// </summary>
 internal class NoRandomIdeologiesSettings : ModSettings
 {
+    public string DefaultSetting = NoRandomIdeologies.RandomSavedString;
     public List<string> FactionIgnore = [];
     public float PercentChance = 0.5f;
     public Dictionary<string, string> PreferedIdeology = [];
@@ -24,15 +26,19 @@ internal class NoRandomIdeologiesSettings : ModSettings
             ref preferedIdeologyKeys, ref preferedIdeologyValues);
         Scribe_Collections.Look(ref FactionIgnore, "FactionIgnore", LookMode.Value);
         Scribe_Values.Look(ref PercentChance, "PercentChance", 0.5f);
+        Scribe_Values.Look(ref DefaultSetting, "DefaultSetting", NoRandomIdeologies.RandomSavedString);
     }
 
     public bool CanReset()
     {
-        return PreferedIdeology.Count > 0 || FactionIgnore.Count > 0 || PercentChance != 0.5f;
+        return PreferedIdeology.Any(pair => pair.Value != DefaultSetting) || FactionIgnore.Count > 0 ||
+               PercentChance != 0.5f ||
+               DefaultSetting != NoRandomIdeologies.RandomSavedString;
     }
 
     public void Reset()
     {
+        DefaultSetting = NoRandomIdeologies.RandomSavedString;
         PreferedIdeology = [];
         foreach (var keyValuePair in NoRandomIdeologies.VanillaFixedIdologies)
         {

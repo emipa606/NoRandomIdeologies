@@ -21,4 +21,8 @@
   <NRI.useRandomOrSavedTT>将在保存的和生成的意识形态之间进行选择，生成意识形态的几率为 {}。</NRI.useRandomOrSavedTT>
   <NRI.overrideRestrictions>忽略限制</NRI.overrideRestrictions>
   <NRI.overrideRestrictionsTT>这将消除该派别在意识形态方面的所有限制</NRI.overrideRestrictionsTT>
+  <NRI.changeAll>全部改为...</NRI.changeAll>
+  <NRI.changeAllSelect>选择</NRI.changeAllSelect>
+  <NRI.defaultOption>新派别的默认值</NRI.defaultOption>
+  <NRI.defaultOptionTT>新修改器中添加的派别应使用什么作为默认值。</NRI.defaultOptionTT>
 </LanguageData>

@@ -21,4 +21,8 @@
   <NRI.useRandomOrSavedTT>Choisira entre un sauvé et un généré avec une {} chance de générer une idéologie.</NRI.useRandomOrSavedTT>
   <NRI.overrideRestrictions>Ignorer les restrictions</NRI.overrideRestrictions>
   <NRI.overrideRestrictionsTT>Cette mesure lèvera toutes les restrictions imposées à cette faction en matière d'idéologies.</NRI.overrideRestrictionsTT>
+  <NRI.changeAll>Changez tout pour...</NRI.changeAll>
+  <NRI.changeAllSelect>Sélectionner</NRI.changeAllSelect>
+  <NRI.defaultOption>Valeur par défaut pour les nouvelles factions</NRI.defaultOption>
+  <NRI.defaultOptionTT>Ce que les factions ajoutées dans les nouveaux mods devraient utiliser comme valeur par défaut.</NRI.defaultOptionTT>
 </LanguageData>

@@ -5,6 +5,10 @@
   <NRI.resetAllFactions>Reset all factions</NRI.resetAllFactions>
   <NRI.reset>Reset</NRI.reset>
   <NRI.none>None</NRI.none>
+  <NRI.changeAll>Change all to...</NRI.changeAll>
+  <NRI.changeAllSelect>Select</NRI.changeAllSelect>
+  <NRI.defaultOption>Default value for new factions</NRI.defaultOption>
+  <NRI.defaultOptionTT>What added factions from new mods should use as a default value.</NRI.defaultOptionTT>
   <NRI.overrideRestrictions>Ignore restrictions</NRI.overrideRestrictions>
   <NRI.overrideRestrictionsTT>This will remove all restrictions from this faction regarding Ideologies</NRI.overrideRestrictionsTT>
   <NRI.percentChance>'Generated OR Saved' has a {0} chance of generating an ideology</NRI.percentChance>

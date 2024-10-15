@@ -4,5 +4,10 @@
   "CanRemove": "0",
   "SocialImageSet": true,
   "FundingSet": true,
-  "PreviewVersion": "1.5"
+  "PreviewVersion": "1.5",
+  "SearchTags": [
+    "ideology control",
+    "faction control",
+    "qol"
+  ]
 }

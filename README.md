@@ -9,6 +9,7 @@ These will also be used when generating random wanderers and guests.
 If no valid saved ideologies are found for a faction it will instead let the game generate one as normal.
 
 You can also select preferred saved ideologies per faction in the mod-options or select to use the vanilla behavior for specific factions.
+There is also an option to override any ideology restrictions for factions.
 
 **NOTE: You may see warnings in your log when the mod caches the ideologies. For example if your saved ideology has a venerated animal from a mod that is currently not loaded, the game will throw an error when it tries to load it. 
 These are expected and can be ignored, an ideology with references to not loaded mods will just be skipped.**
@@ -33,6 +34,6 @@ Since modding is just a hobby for me I expect no donations to keep modding. If y
 -  If you have the solution for a problem, please post it to the GitHub repository.
 -  Use [RimSort](https://github.com/RimSort/RimSort/releases/latest) to sort your mods
 
+ 
 
-
-[![Image](https://img.shields.io/github/v/release/emipa606/NoRandomIdeologies?label=latest%20version&style=plastic&labelColor=0070cd&color=white)](https://steamcommunity.com/sharedfiles/filedetails/changelog/3337263133)
+[![Image](https://img.shields.io/github/v/release/emipa606/NoRandomIdeologies?label=latest%20version&style=plastic&labelColor=0070cd&color=white)](https://steamcommunity.com/sharedfiles/filedetails/changelog/3337263133) | tags: ideology control, faction control, qol

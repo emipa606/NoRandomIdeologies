@@ -13,9 +13,10 @@ namespace NoRandomIdeologies;
 public static class NoRandomIdeologies
 {
     public const string VanillaSaveString = "./Vanilla";
+    public const string RandomSavedString = "./RandomSaved";
     public const string PercentSaveString = "./UsePercent";
     public static DateTime LastCheck;
-    private static readonly List<Ideo> savedIdeos = [];
+    public static readonly List<Ideo> SavedIdeos = [];
 
     public static readonly Dictionary<FactionDef, bool> VanillaFixedIdologies;
     public static readonly Dictionary<FactionDef, List<MemeDef>> VanillaRequiredMemes;
@@ -97,7 +98,7 @@ public static class NoRandomIdeologies
             return;
         }
 
-        savedIdeos.Clear();
+        SavedIdeos.Clear();
         Log.Message("[NoRandomIdeologies]: Loading saved ideologies into cache. " +
                     "This may cause warnings if any saved ideology have precepts or memes that uses content from not loaded mods. " +
                     "These will just be skipped and the warnings can be ignored.");
@@ -178,7 +179,7 @@ public static class NoRandomIdeologies
                 IdeoGenerator.InitLoadedIdeo(currentIdeo);
             }
 
-            savedIdeos.Add(currentIdeo);
+            SavedIdeos.Add(currentIdeo);
         }
 
         isSavingOrLoadingExternalIdeoFieldInfo.SetValue(null, false);
@@ -198,7 +199,7 @@ public static class NoRandomIdeologies
 
         LoadIdeos();
 
-        foreach (var savedIdeo in savedIdeos)
+        foreach (var savedIdeo in SavedIdeos)
         {
             if (savedIdeo.memes != null && savedIdeo.memes.Any(def => !IdeoUtility.IsMemeAllowedFor(def, factionDef)))
             {
@@ -241,13 +242,13 @@ public static class NoRandomIdeologies
 
         LoadIdeos();
 
-        if (!savedIdeos.Any())
+        if (!SavedIdeos.Any())
         {
             return false;
         }
 
         if (NoRandomIdeologiesMod.instance.Settings.PreferedIdeology.TryGetValue(factionDef.defName,
-                out var selectedIdeology))
+                out var selectedIdeology) && selectedIdeology != RandomSavedString)
         {
             if (selectedIdeology == VanillaSaveString)
             {
@@ -263,7 +264,7 @@ public static class NoRandomIdeologies
             }
             else
             {
-                var selectedIdeo = savedIdeos.FirstOrDefault(ideo => ideo.name == selectedIdeology);
+                var selectedIdeo = SavedIdeos.FirstOrDefault(ideo => ideo.name == selectedIdeology);
                 if (selectedIdeo != null)
                 {
                     ideo = selectedIdeo;
@@ -272,7 +273,7 @@ public static class NoRandomIdeologies
             }
         }
 
-        foreach (var savedIdeo in savedIdeos.InRandomOrder())
+        foreach (var savedIdeo in SavedIdeos.InRandomOrder())
         {
             if (savedIdeo.memes != null && savedIdeo.memes.Any(def => !IdeoUtility.IsMemeAllowedFor(def, factionDef)))
             {
