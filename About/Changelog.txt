@@ -1,5 +1,9 @@
 # Changelog for NoRandomIdeologies
 
+1.5.8 - Added the option to select multiple saved ideologies for each faction
+Used DeepL to update translations for ChineseSimplified, French, German, spanish
+
+
 1.5.7 - Added option for what any added faction should choose
 Added button to change all factions at the same time
 If the player chooses a saved ideology and that already have been selected by an existing faction, both factions will now have the same ideology instead of a copy

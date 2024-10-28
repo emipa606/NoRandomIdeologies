@@ -25,4 +25,5 @@
   <NRI.changeAllSelect>选择</NRI.changeAllSelect>
   <NRI.defaultOption>新派别的默认值</NRI.defaultOption>
   <NRI.defaultOptionTT>新修改器中添加的派别应使用什么作为默认值。</NRI.defaultOptionTT>
+  <NRI.multipleSelected>{0}已选定</NRI.multipleSelected>
 </LanguageData>

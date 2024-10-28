@@ -7,6 +7,7 @@
   <NRI.none>None</NRI.none>
   <NRI.changeAll>Change all to...</NRI.changeAll>
   <NRI.changeAllSelect>Select</NRI.changeAllSelect>
+  <NRI.multipleSelected>{0} selected</NRI.multipleSelected>
   <NRI.defaultOption>Default value for new factions</NRI.defaultOption>
   <NRI.defaultOptionTT>What added factions from new mods should use as a default value.</NRI.defaultOptionTT>
   <NRI.overrideRestrictions>Ignore restrictions</NRI.overrideRestrictions>

@@ -25,4 +25,5 @@
   <NRI.changeAllSelect>Sélectionner</NRI.changeAllSelect>
   <NRI.defaultOption>Valeur par défaut pour les nouvelles factions</NRI.defaultOption>
   <NRI.defaultOptionTT>Ce que les factions ajoutées dans les nouveaux mods devraient utiliser comme valeur par défaut.</NRI.defaultOptionTT>
+  <NRI.multipleSelected>{0} sélectionné</NRI.multipleSelected>
 </LanguageData>

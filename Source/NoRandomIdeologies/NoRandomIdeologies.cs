@@ -15,6 +15,7 @@ public static class NoRandomIdeologies
     public const string VanillaSaveString = "./Vanilla";
     public const string RandomSavedString = "./RandomSaved";
     public const string PercentSaveString = "./UsePercent";
+    public const char SaveStringSplitter = '|';
     public static DateTime LastCheck;
     public static readonly List<Ideo> SavedIdeos = [];
 
@@ -201,13 +202,21 @@ public static class NoRandomIdeologies
 
         foreach (var savedIdeo in SavedIdeos)
         {
-            if (savedIdeo.memes != null && savedIdeo.memes.Any(def => !IdeoUtility.IsMemeAllowedFor(def, factionDef)))
+            if (NoRandomIdeologiesMod.instance.Settings.FactionIgnore.Contains(factionDef.defName))
+            {
+                possibleIdeos.Add(savedIdeo);
+                continue;
+            }
+
+            if (savedIdeo.memes != null &&
+                savedIdeo.memes.Any(def => !IdeoUtility.IsMemeAllowedFor(def, factionDef)))
             {
                 toolTipList.Add("NRI.notAllowedMemes".Translate(savedIdeo));
                 continue;
             }
 
-            if (factionDef.requiredMemes != null && factionDef.requiredMemes.Any(def => !savedIdeo.memes.Contains(def)))
+            if (factionDef.requiredMemes != null &&
+                factionDef.requiredMemes.Any(def => !savedIdeo.memes.Contains(def)))
             {
                 toolTipList.Add("NRI.missingRequiredMemes".Translate(savedIdeo));
                 continue;
@@ -230,7 +239,7 @@ public static class NoRandomIdeologies
 
         var factionDef = faction.def;
 
-        if (factionDef.fixedIdeo)
+        if (factionDef.fixedIdeo && !NoRandomIdeologiesMod.instance.Settings.FactionIgnore.Contains(factionDef.defName))
         {
             return false;
         }
@@ -248,14 +257,14 @@ public static class NoRandomIdeologies
         }
 
         if (NoRandomIdeologiesMod.instance.Settings.PreferedIdeology.TryGetValue(factionDef.defName,
-                out var selectedIdeology) && selectedIdeology != RandomSavedString)
+                out var selectedIdeologys) && selectedIdeologys != RandomSavedString)
         {
-            if (selectedIdeology == VanillaSaveString)
+            if (selectedIdeologys == VanillaSaveString)
             {
                 return false;
             }
 
-            if (selectedIdeology == PercentSaveString)
+            if (selectedIdeologys == PercentSaveString)
             {
                 if (Rand.Chance(NoRandomIdeologiesMod.instance.Settings.PercentChance))
                 {
@@ -264,10 +273,11 @@ public static class NoRandomIdeologies
             }
             else
             {
-                var selectedIdeo = SavedIdeos.FirstOrDefault(ideo => ideo.name == selectedIdeology);
-                if (selectedIdeo != null)
+                var selectedIdeosSplitted = selectedIdeologys.Split(SaveStringSplitter);
+                var possibleIdeos = SavedIdeos.Where(ideo => selectedIdeosSplitted.Contains(ideo.name)).ToList();
+                if (possibleIdeos.Any())
                 {
-                    ideo = selectedIdeo;
+                    ideo = possibleIdeos.RandomElement();
                     return true;
                 }
             }
@@ -275,6 +285,11 @@ public static class NoRandomIdeologies
 
         foreach (var savedIdeo in SavedIdeos.InRandomOrder())
         {
+            if (NoRandomIdeologiesMod.instance.Settings.FactionIgnore.Contains(factionDef.defName))
+            {
+                return true;
+            }
+
             if (savedIdeo.memes != null && savedIdeo.memes.Any(def => !IdeoUtility.IsMemeAllowedFor(def, factionDef)))
             {
                 continue;

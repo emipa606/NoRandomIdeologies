@@ -25,4 +25,5 @@
   <NRI.changeAllSelect>Wählen Sie</NRI.changeAllSelect>
   <NRI.defaultOption>Standardwert für neue Fraktionen</NRI.defaultOption>
   <NRI.defaultOptionTT>Was hinzugefügte Fraktionen aus neuen Mods als Standardwert verwenden sollten.</NRI.defaultOptionTT>
+  <NRI.multipleSelected>{0} ausgewählt</NRI.multipleSelected>
 </LanguageData>

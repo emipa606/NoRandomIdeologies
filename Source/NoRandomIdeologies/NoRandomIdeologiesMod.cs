@@ -266,6 +266,13 @@ internal class NoRandomIdeologiesMod : Mod
                         buttonText = "NRI.useRandomSaved".Translate().RawText;
                         break;
                     default:
+                        var selectedSplitted = selectedIdeology.Split(NoRandomIdeologies.SaveStringSplitter);
+                        if (selectedSplitted.Length > 1)
+                        {
+                            buttonText = "NRI.multipleSelected".Translate(selectedSplitted.Length);
+                            break;
+                        }
+
                         buttonText = selectedIdeology;
                         break;
                 }
@@ -307,10 +314,69 @@ internal class NoRandomIdeologiesMod : Mod
             };
             foreach (var ideo in validIdeologies.OrderBy(ideo => ideo.name))
             {
-                options.Add(new FloatMenuOption(ideo.name,
-                    delegate { instance.Settings.PreferedIdeology[factionDef.defName] = ideo.name; }, ideo.Icon,
-                    ideo.primaryFactionColor ?? Color.white,
-                    mouseoverGuiAction: tooltipRect => TooltipHandler.TipRegion(tooltipRect, ideo.description)));
+                var menuItem = new FloatMenuOption(ideo.name,
+                    FactionManagement, ideo.Icon, ideo.primaryFactionColor ?? Color.white,
+                    mouseoverGuiAction: tooltipRect => TooltipHandler.TipRegion(tooltipRect, ideo.description))
+                {
+                    extraPartRightJustified = true,
+                    extraPartWidth = 29f,
+                    extraPartOnGUI = ExtraPartOnGui
+                };
+
+                options.Add(menuItem);
+                continue;
+
+                void FactionManagement()
+                {
+                    if (!instance.Settings.PreferedIdeology.TryGetValue(factionDef.defName, out var ideologyValue))
+                    {
+                        instance.Settings.PreferedIdeology[factionDef.defName] = ideo.name;
+                        return;
+                    }
+
+                    switch (ideologyValue)
+                    {
+                        case NoRandomIdeologies.VanillaSaveString:
+                        case NoRandomIdeologies.PercentSaveString:
+                        case NoRandomIdeologies.RandomSavedString:
+                            instance.Settings.PreferedIdeology[factionDef.defName] = ideo.name;
+                            return;
+                    }
+
+                    var selectedIdeologies = ideologyValue.Split(NoRandomIdeologies.SaveStringSplitter).ToList();
+
+                    if (selectedIdeologies.Contains(ideo.name))
+                    {
+                        selectedIdeologies.RemoveWhere(name => name == ideo.name);
+                    }
+                    else
+                    {
+                        selectedIdeologies.Add(ideo.name);
+                    }
+
+                    if (selectedIdeologies.Count == 0)
+                    {
+                        instance.Settings.PreferedIdeology.Remove(factionDef.defName);
+                        return;
+                    }
+
+                    instance.Settings.PreferedIdeology[factionDef.defName] =
+                        string.Join(NoRandomIdeologies.SaveStringSplitter.ToString(), selectedIdeologies);
+                }
+
+                bool ExtraPartOnGui(Rect iconRect)
+                {
+                    var newRect = new Rect(iconRect.x + 5f, iconRect.y + ((iconRect.height - 24f) / 2f), 24f, 24f);
+                    if (Widgets.ButtonInvisible(newRect))
+                    {
+                        FactionManagement();
+                    }
+
+                    var selected = instance.Settings.PreferedIdeology[factionDef.defName]
+                        .Split(NoRandomIdeologies.SaveStringSplitter).Any(name => name == ideo.name);
+                    Widgets.DrawTextureFitted(newRect, selected ? Widgets.CheckboxOnTex : Widgets.CheckboxOffTex, 1f);
+                    return false;
+                }
             }
 
             Find.WindowStack.Add(new FloatMenu(options));
