@@ -1,5 +1,8 @@
 # Changelog for NoRandomIdeologies
 
+1.5.9 - Fixed percent based selection
+
+
 1.5.8 - Added the option to select multiple saved ideologies for each faction
 Used DeepL to update translations for ChineseSimplified, French, German, spanish
 

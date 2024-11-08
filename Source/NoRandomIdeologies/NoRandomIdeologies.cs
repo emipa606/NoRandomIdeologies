@@ -257,34 +257,32 @@ public static class NoRandomIdeologies
         }
 
         if (NoRandomIdeologiesMod.instance.Settings.PreferedIdeology.TryGetValue(factionDef.defName,
-                out var selectedIdeologys) && selectedIdeologys != RandomSavedString)
+                out var selectedIdeologies) && selectedIdeologies != RandomSavedString)
         {
-            if (selectedIdeologys == VanillaSaveString)
+            if (selectedIdeologies == VanillaSaveString)
             {
                 return false;
             }
 
-            if (selectedIdeologys == PercentSaveString)
+            if (selectedIdeologies == PercentSaveString &&
+                !Rand.Chance(NoRandomIdeologiesMod.instance.Settings.PercentChance))
             {
-                if (Rand.Chance(NoRandomIdeologiesMod.instance.Settings.PercentChance))
-                {
-                    return true;
-                }
+                return false;
             }
-            else
+
+            var selectedIdeosSplitted = selectedIdeologies.Split(SaveStringSplitter);
+            var possibleIdeos = SavedIdeos.Where(ideo => selectedIdeosSplitted.Contains(ideo.name)).ToList();
+            if (possibleIdeos.Any())
             {
-                var selectedIdeosSplitted = selectedIdeologys.Split(SaveStringSplitter);
-                var possibleIdeos = SavedIdeos.Where(ideo => selectedIdeosSplitted.Contains(ideo.name)).ToList();
-                if (possibleIdeos.Any())
-                {
-                    ideo = possibleIdeos.RandomElement();
-                    return true;
-                }
+                ideo = possibleIdeos.RandomElement();
+                return true;
             }
         }
 
         foreach (var savedIdeo in SavedIdeos.InRandomOrder())
         {
+            ideo = savedIdeo;
+
             if (NoRandomIdeologiesMod.instance.Settings.FactionIgnore.Contains(factionDef.defName))
             {
                 return true;
@@ -299,8 +297,6 @@ public static class NoRandomIdeologies
             {
                 continue;
             }
-
-            ideo = savedIdeo;
 
             return true;
         }

@@ -28,7 +28,6 @@ public static class FactionIdeosTracker_ChooseOrGenerateIdeo
 
         ___primaryIdeo = ideo;
         Find.IdeoManager.Add(ideo);
-        Log.Message($"[NoRandomIdeologies]: Gave ideology {ideo} to {___faction}");
         return false;
     }
 }
