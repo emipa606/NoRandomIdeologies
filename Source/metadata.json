@@ -4,10 +4,17 @@
   "CanRemove": "0",
   "SocialImageSet": true,
   "FundingSet": true,
-  "PreviewVersion": "1.5",
+  "PreviewVersion": "1.6",
   "SearchTags": [
     "ideology control",
     "faction control",
     "qol"
-  ]
+  ],
+  "Patches": false,
+  "Defs": false,
+  "Assemblies": true,
+  "LinesOfCode": 32795,
+  "LinesOfXML": 0,
+  "CodeBaseSize": 71,
+  "LastXmlCleaning": "2025-07-06T20:11:11.7410883+02:00"
 }

@@ -14,13 +14,13 @@ internal class NoRandomIdeologiesMod : Mod
     /// <summary>
     ///     The instance of the settings to be read by the mod
     /// </summary>
-    public static NoRandomIdeologiesMod instance;
+    public static NoRandomIdeologiesMod Instance;
 
     private static string currentVersion;
 
     private static Vector2 scrollPosition;
 
-    private static readonly Color alternateBackground = new Color(0.2f, 0.2f, 0.2f, 0.5f);
+    private static readonly Color alternateBackground = new(0.2f, 0.2f, 0.2f, 0.5f);
 
     public static readonly Dictionary<FactionDef, Tuple<List<Ideo>, string>> FactionSelectionCache = [];
 
@@ -32,7 +32,7 @@ internal class NoRandomIdeologiesMod : Mod
     /// <param name="content"></param>
     public NoRandomIdeologiesMod(ModContentPack content) : base(content)
     {
-        instance = this;
+        Instance = this;
         Settings = GetSettings<NoRandomIdeologiesSettings>();
         currentVersion = VersionFromManifest.GetVersionFromModMetaData(content.ModMetaData);
     }
@@ -59,25 +59,25 @@ internal class NoRandomIdeologiesMod : Mod
     public override void DoSettingsWindowContents(Rect rect)
     {
         NoRandomIdeologies.LoadIdeos();
-        var listing_Standard = new Listing_Standard();
-        listing_Standard.Begin(rect);
+        var listingStandard = new Listing_Standard();
+        listingStandard.Begin(rect);
 
-        Settings.PercentChance = listing_Standard.SliderLabeled(
+        Settings.PercentChance = listingStandard.SliderLabeled(
             "NRI.percentChance".Translate(Settings.PercentChance.ToStringPercent()),
             Settings.PercentChance, 0, 1f, tooltip: "NRI.percentChanceTT".Translate());
-        if (listing_Standard.ButtonTextLabeledPct("NRI.changeAll".Translate(), "NRI.changeAllSelect".Translate(), 0.7f))
+        if (listingStandard.ButtonTextLabeledPct("NRI.changeAll".Translate(), "NRI.changeAllSelect".Translate(), 0.7f))
         {
             var options = new List<FloatMenuOption>
             {
-                new FloatMenuOption("NRI.useRandomSaved".Translate(),
+                new("NRI.useRandomSaved".Translate(),
                     delegate { changeAll = NoRandomIdeologies.RandomSavedString; },
                     mouseoverGuiAction: tooltipRect =>
                         TooltipHandler.TipRegion(tooltipRect, "NRI.useRandomSavedTT".Translate())),
-                new FloatMenuOption("NRI.useRandomOrSaved".Translate(),
+                new("NRI.useRandomOrSaved".Translate(),
                     delegate { changeAll = NoRandomIdeologies.PercentSaveString; },
                     mouseoverGuiAction: tooltipRect =>
                         TooltipHandler.TipRegion(tooltipRect, "NRI.useRandomOrSavedTT".Translate())),
-                new FloatMenuOption("NRI.useGenerated".Translate(),
+                new("NRI.useGenerated".Translate(),
                     delegate { changeAll = NoRandomIdeologies.VanillaSaveString; },
                     mouseoverGuiAction: tooltipRect =>
                         TooltipHandler.TipRegion(tooltipRect, "NRI.useGeneratedTT".Translate()))
@@ -104,20 +104,20 @@ internal class NoRandomIdeologiesMod : Mod
                 break;
         }
 
-        if (listing_Standard.ButtonTextLabeledPct("NRI.defaultOption".Translate(), defaultButtonText, 0.7f,
+        if (listingStandard.ButtonTextLabeledPct("NRI.defaultOption".Translate(), defaultButtonText, 0.7f,
                 tooltip: "NRI.defaultOptionTT".Translate()))
         {
             var options = new List<FloatMenuOption>
             {
-                new FloatMenuOption("NRI.useRandomSaved".Translate(),
+                new("NRI.useRandomSaved".Translate(),
                     delegate { Settings.DefaultSetting = NoRandomIdeologies.RandomSavedString; },
                     mouseoverGuiAction: tooltipRect =>
                         TooltipHandler.TipRegion(tooltipRect, "NRI.useRandomSavedTT".Translate())),
-                new FloatMenuOption("NRI.useRandomOrSaved".Translate(),
+                new("NRI.useRandomOrSaved".Translate(),
                     delegate { Settings.DefaultSetting = NoRandomIdeologies.PercentSaveString; },
                     mouseoverGuiAction: tooltipRect =>
                         TooltipHandler.TipRegion(tooltipRect, "NRI.useRandomOrSavedTT".Translate())),
-                new FloatMenuOption("NRI.useGenerated".Translate(),
+                new("NRI.useGenerated".Translate(),
                     delegate { Settings.DefaultSetting = NoRandomIdeologies.VanillaSaveString; },
                     mouseoverGuiAction: tooltipRect =>
                         TooltipHandler.TipRegion(tooltipRect, "NRI.useGeneratedTT".Translate()))
@@ -126,29 +126,29 @@ internal class NoRandomIdeologiesMod : Mod
         }
 
         if (Settings.CanReset() &&
-            listing_Standard.ButtonTextLabeledPct("NRI.resetAllFactions".Translate(), "NRI.reset".Translate(), 0.7f))
+            listingStandard.ButtonTextLabeledPct("NRI.resetAllFactions".Translate(), "NRI.reset".Translate(), 0.7f))
         {
             Settings.Reset();
             FactionSelectionCache.Clear();
         }
         else
         {
-            listing_Standard.Gap();
-            listing_Standard.Gap();
+            listingStandard.Gap();
+            listingStandard.Gap();
         }
 
         if (currentVersion != null)
         {
             GUI.contentColor = Color.gray;
-            listing_Standard.Label("NRI.modVersion".Translate(currentVersion));
+            listingStandard.Label("NRI.modVersion".Translate(currentVersion));
             GUI.contentColor = Color.white;
         }
 
-        listing_Standard.End();
+        listingStandard.End();
 
         var outerRect = rect;
-        outerRect.y += listing_Standard.CurHeight + 30f;
-        outerRect.height -= listing_Standard.CurHeight + 30f;
+        outerRect.y += listingStandard.CurHeight + 30f;
+        outerRect.height -= listingStandard.CurHeight + 30f;
         var innerRect = outerRect;
         innerRect.width -= 20;
         innerRect.x = 0;
@@ -197,7 +197,7 @@ internal class NoRandomIdeologiesMod : Mod
                 else
                 {
                     Settings.FactionIgnore.Remove(factionDef.defName);
-                    factionDef.fixedIdeo = NoRandomIdeologies.VanillaFixedIdologies[factionDef];
+                    factionDef.fixedIdeo = NoRandomIdeologies.VanillaFixedIdeologies[factionDef];
                     factionDef.requiredMemes = NoRandomIdeologies.VanillaRequiredMemes[factionDef];
                 }
             }
@@ -235,12 +235,12 @@ internal class NoRandomIdeologiesMod : Mod
                     case NoRandomIdeologies.RandomSavedString:
                     case NoRandomIdeologies.PercentSaveString:
                     case NoRandomIdeologies.VanillaSaveString:
-                        Settings.PreferedIdeology[factionDef.defName] = changeAll;
+                        Settings.PreferredIdeology[factionDef.defName] = changeAll;
                         break;
                     default:
                         if (validIdeologies.Any(ideo => ideo.name == changeAll))
                         {
-                            Settings.PreferedIdeology[factionDef.defName] = changeAll;
+                            Settings.PreferredIdeology[factionDef.defName] = changeAll;
                         }
 
                         break;
@@ -250,7 +250,7 @@ internal class NoRandomIdeologiesMod : Mod
             }
 
             var savedValueFound =
-                instance.Settings.PreferedIdeology.TryGetValue(factionDef.defName, out var selectedIdeology);
+                Instance.Settings.PreferredIdeology.TryGetValue(factionDef.defName, out var selectedIdeology);
             string buttonText;
             if (savedValueFound)
             {
@@ -280,7 +280,7 @@ internal class NoRandomIdeologiesMod : Mod
             else
             {
                 buttonText = "NRI.useRandomSaved".Translate().RawText;
-                instance.Settings.PreferedIdeology[factionDef.defName] = NoRandomIdeologies.RandomSavedString;
+                Instance.Settings.PreferredIdeology[factionDef.defName] = NoRandomIdeologies.RandomSavedString;
             }
 
             if (!Widgets.ButtonText(row.RightPart(0.3f).ExpandedBy(0, 4f), buttonText))
@@ -290,24 +290,24 @@ internal class NoRandomIdeologiesMod : Mod
 
             var options = new List<FloatMenuOption>
             {
-                new FloatMenuOption("NRI.useRandomSaved".Translate(),
+                new("NRI.useRandomSaved".Translate(),
                     delegate
                     {
-                        instance.Settings.PreferedIdeology[factionDef.defName] = NoRandomIdeologies.RandomSavedString;
+                        Instance.Settings.PreferredIdeology[factionDef.defName] = NoRandomIdeologies.RandomSavedString;
                     },
                     mouseoverGuiAction: tooltipRect =>
                         TooltipHandler.TipRegion(tooltipRect, "NRI.useRandomSavedTT".Translate())),
-                new FloatMenuOption("NRI.useRandomOrSaved".Translate(),
+                new("NRI.useRandomOrSaved".Translate(),
                     delegate
                     {
-                        instance.Settings.PreferedIdeology[factionDef.defName] = NoRandomIdeologies.PercentSaveString;
+                        Instance.Settings.PreferredIdeology[factionDef.defName] = NoRandomIdeologies.PercentSaveString;
                     },
                     mouseoverGuiAction: tooltipRect =>
                         TooltipHandler.TipRegion(tooltipRect, "NRI.useRandomOrSavedTT".Translate())),
-                new FloatMenuOption("NRI.useGenerated".Translate(),
+                new("NRI.useGenerated".Translate(),
                     delegate
                     {
-                        instance.Settings.PreferedIdeology[factionDef.defName] = NoRandomIdeologies.VanillaSaveString;
+                        Instance.Settings.PreferredIdeology[factionDef.defName] = NoRandomIdeologies.VanillaSaveString;
                     },
                     mouseoverGuiAction: tooltipRect =>
                         TooltipHandler.TipRegion(tooltipRect, "NRI.useGeneratedTT".Translate()))
@@ -315,22 +315,22 @@ internal class NoRandomIdeologiesMod : Mod
             foreach (var ideo in validIdeologies.OrderBy(ideo => ideo.name))
             {
                 var menuItem = new FloatMenuOption(ideo.name,
-                    FactionManagement, ideo.Icon, ideo.primaryFactionColor ?? Color.white,
+                    factionManagement, ideo.Icon, ideo.primaryFactionColor ?? Color.white,
                     mouseoverGuiAction: tooltipRect => TooltipHandler.TipRegion(tooltipRect, ideo.description))
                 {
                     extraPartRightJustified = true,
                     extraPartWidth = 29f,
-                    extraPartOnGUI = ExtraPartOnGui
+                    extraPartOnGUI = extraPartOnGui
                 };
 
                 options.Add(menuItem);
                 continue;
 
-                void FactionManagement()
+                void factionManagement()
                 {
-                    if (!instance.Settings.PreferedIdeology.TryGetValue(factionDef.defName, out var ideologyValue))
+                    if (!Instance.Settings.PreferredIdeology.TryGetValue(factionDef.defName, out var ideologyValue))
                     {
-                        instance.Settings.PreferedIdeology[factionDef.defName] = ideo.name;
+                        Instance.Settings.PreferredIdeology[factionDef.defName] = ideo.name;
                         return;
                     }
 
@@ -339,7 +339,7 @@ internal class NoRandomIdeologiesMod : Mod
                         case NoRandomIdeologies.VanillaSaveString:
                         case NoRandomIdeologies.PercentSaveString:
                         case NoRandomIdeologies.RandomSavedString:
-                            instance.Settings.PreferedIdeology[factionDef.defName] = ideo.name;
+                            Instance.Settings.PreferredIdeology[factionDef.defName] = ideo.name;
                             return;
                     }
 
@@ -356,23 +356,23 @@ internal class NoRandomIdeologiesMod : Mod
 
                     if (selectedIdeologies.Count == 0)
                     {
-                        instance.Settings.PreferedIdeology.Remove(factionDef.defName);
+                        Instance.Settings.PreferredIdeology.Remove(factionDef.defName);
                         return;
                     }
 
-                    instance.Settings.PreferedIdeology[factionDef.defName] =
+                    Instance.Settings.PreferredIdeology[factionDef.defName] =
                         string.Join(NoRandomIdeologies.SaveStringSplitter.ToString(), selectedIdeologies);
                 }
 
-                bool ExtraPartOnGui(Rect iconRect)
+                bool extraPartOnGui(Rect iconRect)
                 {
                     var newRect = new Rect(iconRect.x + 5f, iconRect.y + ((iconRect.height - 24f) / 2f), 24f, 24f);
                     if (Widgets.ButtonInvisible(newRect))
                     {
-                        FactionManagement();
+                        factionManagement();
                     }
 
-                    var selected = instance.Settings.PreferedIdeology[factionDef.defName]
+                    var selected = Instance.Settings.PreferredIdeology[factionDef.defName]
                         .Split(NoRandomIdeologies.SaveStringSplitter).Any(name => name == ideo.name);
                     Widgets.DrawTextureFitted(newRect, selected ? Widgets.CheckboxOnTex : Widgets.CheckboxOffTex, 1f);
                     return false;

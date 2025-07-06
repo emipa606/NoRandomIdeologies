@@ -8,7 +8,7 @@ public static class IdeoUtility_IsMemeAllowedFor
 {
     public static bool Prefix(FactionDef faction, ref bool __result)
     {
-        if (!NoRandomIdeologiesMod.instance.Settings.FactionIgnore.Contains(faction.defName))
+        if (!NoRandomIdeologiesMod.Instance.Settings.FactionIgnore.Contains(faction.defName))
         {
             return true;
         }

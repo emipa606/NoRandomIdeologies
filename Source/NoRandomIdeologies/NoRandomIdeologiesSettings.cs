@@ -12,9 +12,9 @@ internal class NoRandomIdeologiesSettings : ModSettings
     public string DefaultSetting = NoRandomIdeologies.RandomSavedString;
     public List<string> FactionIgnore = [];
     public float PercentChance = 0.5f;
-    public Dictionary<string, string> PreferedIdeology = [];
-    private List<string> preferedIdeologyKeys = [];
-    private List<string> preferedIdeologyValues = [];
+    public Dictionary<string, string> PreferredIdeology = [];
+    private List<string> preferredIdeologyKeys = [];
+    private List<string> preferredIdeologyValues = [];
 
     /// <summary>
     ///     Saving and loading the values
@@ -22,8 +22,8 @@ internal class NoRandomIdeologiesSettings : ModSettings
     public override void ExposeData()
     {
         base.ExposeData();
-        Scribe_Collections.Look(ref PreferedIdeology, "PreferedIdeology", LookMode.Value, LookMode.Value,
-            ref preferedIdeologyKeys, ref preferedIdeologyValues);
+        Scribe_Collections.Look(ref PreferredIdeology, "PreferedIdeology", LookMode.Value, LookMode.Value,
+            ref preferredIdeologyKeys, ref preferredIdeologyValues);
         Scribe_Collections.Look(ref FactionIgnore, "FactionIgnore", LookMode.Value);
         Scribe_Values.Look(ref PercentChance, "PercentChance", 0.5f);
         Scribe_Values.Look(ref DefaultSetting, "DefaultSetting", NoRandomIdeologies.RandomSavedString);
@@ -31,7 +31,7 @@ internal class NoRandomIdeologiesSettings : ModSettings
 
     public bool CanReset()
     {
-        return PreferedIdeology.Any(pair => pair.Value != DefaultSetting) || FactionIgnore.Count > 0 ||
+        return PreferredIdeology.Any(pair => pair.Value != DefaultSetting) || FactionIgnore.Count > 0 ||
                PercentChance != 0.5f ||
                DefaultSetting != NoRandomIdeologies.RandomSavedString;
     }
@@ -39,8 +39,8 @@ internal class NoRandomIdeologiesSettings : ModSettings
     public void Reset()
     {
         DefaultSetting = NoRandomIdeologies.RandomSavedString;
-        PreferedIdeology = [];
-        foreach (var keyValuePair in NoRandomIdeologies.VanillaFixedIdologies)
+        PreferredIdeology = [];
+        foreach (var keyValuePair in NoRandomIdeologies.VanillaFixedIdeologies)
         {
             keyValuePair.Key.fixedIdeo = keyValuePair.Value;
         }

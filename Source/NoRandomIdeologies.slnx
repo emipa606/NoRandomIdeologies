@@ -1,0 +1,6 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Release" />
+  </Configurations>
+  <Project Path="NoRandomIdeologies/NoRandomIdeologies.csproj" />
+</Solution>

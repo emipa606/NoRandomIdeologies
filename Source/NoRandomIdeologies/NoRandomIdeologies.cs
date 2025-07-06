@@ -19,7 +19,7 @@ public static class NoRandomIdeologies
     public static DateTime LastCheck;
     public static readonly List<Ideo> SavedIdeos = [];
 
-    public static readonly Dictionary<FactionDef, bool> VanillaFixedIdologies;
+    public static readonly Dictionary<FactionDef, bool> VanillaFixedIdeologies;
     public static readonly Dictionary<FactionDef, List<MemeDef>> VanillaRequiredMemes;
 
 
@@ -35,18 +35,15 @@ public static class NoRandomIdeologies
     {
         AllFactionDefs = DefDatabase<FactionDef>.AllDefsListForReading.Where(def => !def.isPlayer)
             .OrderBy(def => def.label).ToList();
-        VanillaFixedIdologies = [];
+        VanillaFixedIdeologies = [];
         VanillaRequiredMemes = [];
-        if (NoRandomIdeologiesMod.instance.Settings.FactionIgnore == null)
-        {
-            NoRandomIdeologiesMod.instance.Settings.FactionIgnore = [];
-        }
+        NoRandomIdeologiesMod.Instance.Settings.FactionIgnore ??= [];
 
         foreach (var factionDef in AllFactionDefs)
         {
-            VanillaFixedIdologies[factionDef] = factionDef.fixedIdeo;
+            VanillaFixedIdeologies[factionDef] = factionDef.fixedIdeo;
             VanillaRequiredMemes[factionDef] = factionDef.requiredMemes;
-            if (!NoRandomIdeologiesMod.instance.Settings.FactionIgnore.Contains(factionDef.defName))
+            if (!NoRandomIdeologiesMod.Instance.Settings.FactionIgnore.Contains(factionDef.defName))
             {
                 continue;
             }
@@ -202,7 +199,7 @@ public static class NoRandomIdeologies
 
         foreach (var savedIdeo in SavedIdeos)
         {
-            if (NoRandomIdeologiesMod.instance.Settings.FactionIgnore.Contains(factionDef.defName))
+            if (NoRandomIdeologiesMod.Instance.Settings.FactionIgnore.Contains(factionDef.defName))
             {
                 possibleIdeos.Add(savedIdeo);
                 continue;
@@ -239,7 +236,7 @@ public static class NoRandomIdeologies
 
         var factionDef = faction.def;
 
-        if (factionDef.fixedIdeo && !NoRandomIdeologiesMod.instance.Settings.FactionIgnore.Contains(factionDef.defName))
+        if (factionDef.fixedIdeo && !NoRandomIdeologiesMod.Instance.Settings.FactionIgnore.Contains(factionDef.defName))
         {
             return false;
         }
@@ -256,22 +253,19 @@ public static class NoRandomIdeologies
             return false;
         }
 
-        if (NoRandomIdeologiesMod.instance.Settings.PreferedIdeology.TryGetValue(factionDef.defName,
+        if (NoRandomIdeologiesMod.Instance.Settings.PreferredIdeology.TryGetValue(factionDef.defName,
                 out var selectedIdeologies) && selectedIdeologies != RandomSavedString)
         {
-            if (selectedIdeologies == VanillaSaveString)
+            switch (selectedIdeologies)
             {
-                return false;
+                case VanillaSaveString:
+                case PercentSaveString when
+                    !Rand.Chance(NoRandomIdeologiesMod.Instance.Settings.PercentChance):
+                    return false;
             }
 
-            if (selectedIdeologies == PercentSaveString &&
-                !Rand.Chance(NoRandomIdeologiesMod.instance.Settings.PercentChance))
-            {
-                return false;
-            }
-
-            var selectedIdeosSplitted = selectedIdeologies.Split(SaveStringSplitter);
-            var possibleIdeos = SavedIdeos.Where(ideo => selectedIdeosSplitted.Contains(ideo.name)).ToList();
+            var selectedIdeosSplit = selectedIdeologies.Split(SaveStringSplitter);
+            var possibleIdeos = SavedIdeos.Where(ideo => selectedIdeosSplit.Contains(ideo.name)).ToList();
             if (possibleIdeos.Any())
             {
                 ideo = possibleIdeos.RandomElement();
@@ -283,7 +277,7 @@ public static class NoRandomIdeologies
         {
             ideo = savedIdeo;
 
-            if (NoRandomIdeologiesMod.instance.Settings.FactionIgnore.Contains(factionDef.defName))
+            if (NoRandomIdeologiesMod.Instance.Settings.FactionIgnore.Contains(factionDef.defName))
             {
                 return true;
             }
