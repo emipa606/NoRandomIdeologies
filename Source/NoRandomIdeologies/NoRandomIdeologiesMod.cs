@@ -55,12 +55,12 @@ internal class NoRandomIdeologiesMod : Mod
     ///     The settings-window
     ///     For more info: https://rimworldwiki.com/wiki/Modding_Tutorials/ModSettings
     /// </summary>
-    /// <param name="rect"></param>
-    public override void DoSettingsWindowContents(Rect rect)
+    /// <param name="inRect"></param>
+    public override void DoSettingsWindowContents(Rect inRect)
     {
         NoRandomIdeologies.LoadIdeos();
         var listingStandard = new Listing_Standard();
-        listingStandard.Begin(rect);
+        listingStandard.Begin(inRect);
 
         Settings.PercentChance = listingStandard.SliderLabeled(
             "NRI.percentChance".Translate(Settings.PercentChance.ToStringPercent()),
@@ -146,7 +146,7 @@ internal class NoRandomIdeologiesMod : Mod
 
         listingStandard.End();
 
-        var outerRect = rect;
+        var outerRect = inRect;
         outerRect.y += listingStandard.CurHeight + 30f;
         outerRect.height -= listingStandard.CurHeight + 30f;
         var innerRect = outerRect;
@@ -266,8 +266,8 @@ internal class NoRandomIdeologiesMod : Mod
                         buttonText = "NRI.useRandomSaved".Translate().RawText;
                         break;
                     default:
-                        var selectedSplitted = selectedIdeology.Split(NoRandomIdeologies.SaveStringSplitter);
-                        if (selectedSplitted.Length > 1)
+                        var selectedSplitted = selectedIdeology?.Split(NoRandomIdeologies.SaveStringSplitter);
+                        if (selectedSplitted is { Length: > 1 })
                         {
                             buttonText = "NRI.multipleSelected".Translate(selectedSplitted.Length);
                             break;

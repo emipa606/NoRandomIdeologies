@@ -110,7 +110,7 @@ public static class NoRandomIdeologies
                 isSavingOrLoadingExternalIdeoFieldInfo.SetValue(null, true);
                 Scribe.loader.InitLoading(filePath);
                 ScribeMetaHeaderUtility.LoadGameDataHeader(ScribeMetaHeaderUtility.ScribeHeaderMode.Ideo, false);
-                var currentLogValue = (bool)reachedMaxMessagesLimitFieldInfo.GetValue(null);
+                var currentLogValue = (bool)(reachedMaxMessagesLimitFieldInfo.GetValue(null) ?? false);
                 if (!currentLogValue)
                 {
                     reachedMaxMessagesLimitFieldInfo.SetValue(null, true);
@@ -287,7 +287,8 @@ public static class NoRandomIdeologies
                 continue;
             }
 
-            if (factionDef.requiredMemes != null && factionDef.requiredMemes.Any(def => !savedIdeo.memes.Contains(def)))
+            if (factionDef.requiredMemes != null &&
+                factionDef.requiredMemes.Any(def => savedIdeo.memes != null && !savedIdeo.memes.Contains(def)))
             {
                 continue;
             }
